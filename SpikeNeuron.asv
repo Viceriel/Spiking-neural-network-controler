@@ -46,7 +46,13 @@ classdef SpikeNeuron
         
         function obj = OutputCompute()
            
+           sum = 0;
+           sum = obj.weights(1, :)* previous_layers{1}{1 : end}.output;
+           sum = sum + obj.weights(2, :)* previous_layers{2}{1 : end}.output;
+           sum = sum + (obj.reccurent_weight * obj.v);
            
+           obj.v = obj.v + (0.04*obj.c^2 + 5*v + 140 - obj.u + sum);
+           obj.u = obj.u + (obj.a * (obj.b*obj.v-obj.u));
             
             
         end

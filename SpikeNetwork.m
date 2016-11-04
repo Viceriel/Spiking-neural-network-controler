@@ -35,17 +35,9 @@ classdef SpikeNetwork
                         obj.weights{i}{j}{k} = {};
                         
                         for l = 1 : obj.layers(k)
-                        
-                          if connections(i, k) == 1
-                             
+                                                     
                               obj.weights{i}{j}{k}{l} = Synapse();
-                              
-                          else
-                              
-                              obj.weights{i}{j}{k}{l} = 0;
-                              
-                          end
-                           
+                                
                         end
                        
                     end
@@ -76,6 +68,40 @@ classdef SpikeNetwork
                 
             end
             
+        end
+        
+        function obj = Run(obj, data)
+            
+            for i = 1 : obj.layers
+               
+                obj.neural{1}{1}{i} = ComputeOutput(obj.neural{1}{1}{i}, data(i));
+                
+            end
+            
+            len = length(obj.layers);
+            
+            for i = 2 : len
+                
+                for j = 1 : obj.layers(i)
+                    
+                    input = 0;
+                   
+                    for k = 1 : len
+                       
+                        for l = 1 : obj.layers(k)
+                          
+                            input = input + (obj.neural{k}{1}{l}.output*obj.weights{i}{j}{k}{l}.value);
+                            
+                        end
+                        
+                    end
+                    
+                    obj.neural{i}{1}{j} = OutputCompute(obj.neural{i}{1}{j}, input);
+                    
+                end
+                
+            end
+                       
         end
         
     end

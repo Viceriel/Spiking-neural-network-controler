@@ -2,7 +2,7 @@ classdef InputNeuron
    
     properties
         
-        output
+        output;
        
     end
     

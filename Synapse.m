@@ -4,9 +4,6 @@ classdef Synapse
        
         value;
         rule;
-        learning_rate;
-        pre_synaptic_index;
-        post_synaptic_index;
         pre_synaptic_time;
         post_synaptic_time;
         

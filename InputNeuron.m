@@ -3,6 +3,7 @@ classdef InputNeuron
     properties
         
         output;
+        spike_time;
        
     end
     

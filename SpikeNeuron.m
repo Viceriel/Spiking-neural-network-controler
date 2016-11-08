@@ -3,12 +3,17 @@ classdef SpikeNeuron
     properties
        
         output;
+        spike_time;
+        rule;
         u;
         v;
         a;
         b;
         c;
         d;
+        A1;
+        A2;
+        tau;
         
     end
     
@@ -23,6 +28,11 @@ classdef SpikeNeuron
             obj.output = 0;
             obj.u = obj.c*obj.b;
             obj.v = obj.c;
+            obj.spike_time = 0;
+            obj.A1 = 1;
+            obj.A2 = 1;
+            obj.rule = 1;
+            obj.tau = 10;
             
         end
         

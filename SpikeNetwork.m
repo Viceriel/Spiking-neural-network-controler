@@ -8,14 +8,18 @@ classdef SpikeNetwork
         connections;
         layers;
         time;
-        a;
+        max;
+        min;
         
     end
     
     methods
        
-        function obj = SpikeNetwork(structure, connections)
+        function obj = SpikeNetwork(structure, connections, ma, mi)
            
+            obj.time = 0;
+            obj.max = ma;
+            obj.min = mi;
             obj.time = 0;
             len = length(structure);
             obj.layers = structure;
@@ -37,6 +41,10 @@ classdef SpikeNetwork
                         for l = 1 : obj.layers(k)
                                                      
                               obj.weights{i}{j}{k}{l} = Synapse();
+                              
+                              if connections(i, k) == 1
+                                 obj.weights{i}{j}{k}{l}.value = (ma - mi)*rand(1, 1) + mi;
+                              end
                                 
                         end
                        
@@ -76,11 +84,19 @@ classdef SpikeNetwork
                
                 obj.neural{1}{1}{i} = ComputeOutput(obj.neural{1}{1}{i}, data(i));
                 
+                if obj.neural{1}{1}{i}.output == 1
+                    obj.neural{1}{1}{i}.spike_time = obj.time;
+                end
+                
             end
+            
+            obj.time = obj.time + 1;
             
             len = length(obj.layers);
             
             for i = 2 : len
+                
+                obj.time = obj.time + 1;
                 
                 for j = 1 : obj.layers(i)
                     
@@ -98,10 +114,49 @@ classdef SpikeNetwork
                     
                     obj.neural{i}{1}{j} = OutputCompute(obj.neural{i}{1}{j}, input);
                     
-                end
-                
-            end
+                    if obj.neural{i}{1}{j}.output == 1
                        
+                        obj.neural{i}{1}{j}.spike_time = obj.time;
+                        
+                         for m = 1 : len
+                           
+                            for n = 1 : obj.layers(m)
+                               
+                                if obj.weights{i}{j}{m}{n}.value ~= 0
+                                   
+                                    obj = STDP(obj, obj.neural{m}{1}{n}.spike_time - obj.neural{i}{1}{j}.spike_time, [i j], [m n], obj.neural{i}{1}{j}.rule);
+                                    
+                                end
+                                
+                            end        
+                         end   
+                    end    
+                end
+            end    
+        end
+        
+        function obj = STDP(obj, spike_differences, post, pre, rule)
+            
+            if rule == 1
+                if spike_differences < 0 
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                else
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                end
+            else
+                if spike_differences < 0
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                else
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                end
+            end
+            
+            if obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value > obj.max
+                obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.max;
+            elseif obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value < obj.min
+                obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.min;
+            end
+            
         end
         
     end

@@ -23,7 +23,7 @@ classdef SpikeNeuron
             
             obj.a = 0.02;
             obj.b = 0.2;
-            obj.c = -30;
+            obj.c = -50.5;
             obj.d = 2;
             obj.output = 0;
             obj.u = obj.c*obj.b;

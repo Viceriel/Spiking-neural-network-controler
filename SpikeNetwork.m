@@ -10,6 +10,7 @@ classdef SpikeNetwork
         time;
         max;
         min;
+        net_output;
         
     end
     
@@ -24,6 +25,7 @@ classdef SpikeNetwork
             obj.layers = structure;
             obj.neural = {};
             obj.weights = {};
+            obj.net_output = 0;
             
             for i = 2 : len
                
@@ -161,7 +163,13 @@ classdef SpikeNetwork
                         end
                     end
                 end
-            end    
+            end
+            
+            for i = 1 : obj.layers(len)
+               
+                obj.net_output(i) = obj.neural{len}{1}{i}.output;
+                
+            end
         end
         
         function obj = STDP(obj, spike_differences, post, pre, rule)

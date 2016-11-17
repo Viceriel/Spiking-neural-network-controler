@@ -34,7 +34,7 @@ classdef GeneticAlgorithm
         function obj = Initialization(obj, init)
             
             for i = 1 : init  
-                for j = 1 : chromosone
+                for j = 1 : obj.m_chromosone_length
                    obj.m_population(i, j) = randi([0 1]); 
                 end
             end
@@ -61,13 +61,22 @@ classdef GeneticAlgorithm
         
         function obj = Fitness(obj, population)
          
-            len = size(obj.m_population, population);
+            len = size(obj.m_population);
             len = len(1);
+            xRef = 0.1;
+            yRef = 0.1;
             
             for i = 1 : len
                
-                net = Decoding(obj, i);
+                net = Decoding(obj, i, population);
                 
+                [x, y] = RunSim(net, 0.1, 0.1, 5);
+                
+                for j = 1:length(x)-1
+                    sumPath = (x(j) - x(j+1))^2 + (y(j) - y(j+1))^2;
+                end
+                
+                population(i, end) = 1000/((x(end) - xRef)^2 + (y(end) - yRef)^2 + sumPath);
             end
             
         end
@@ -94,9 +103,9 @@ classdef GeneticAlgorithm
             len = obj.m_population_size;
             
             for i = 1 : len
-                divide_point = randi([1 (sum(obj.m_structure) - 1)]);
-                parent1 = Selection(obj);
-                parent2 = Selection(obj);
+                divide_point = randi([1 (sum(obj.m_structure) - obj.m_structure(end) - 1)]);
+                parent1 = Selection(obj, obj.m_population);
+                parent2 = Selection(obj, obj.m_population);
                 obj.m_children(i, 1 : divide_point * 16) = obj.m_population(parent1, 1 : divide_point * 16); 
                 obj.m_children(i, divide_point * 16 + 1 : end - 1) = obj.m_population(parent2, divide_point * 16 + 1 : end - 1);
             end
@@ -110,7 +119,7 @@ classdef GeneticAlgorithm
             mutation_probability =  obj.m_mutation_rate;
             
             for i = 1 : len
-                for j = 1 : len
+                for j = 1 : len1
                     if rand([1 1]) <= mutation_probability
                         if obj.m_children(i, j) == 1
                             obj.m_children(i, j) = 0;
@@ -158,9 +167,9 @@ classdef GeneticAlgorithm
             
         end
         
-        function top = Evolve(obj, generations)
+        function obj = Evolve(obj, generations)
            
-            obj = Initialize(obj, 1);
+            obj = Initialization(obj, 1);
             obj = Fitness(obj, obj.m_population);
             
             for i = 1 : generations
@@ -171,11 +180,9 @@ classdef GeneticAlgorithm
                 
                 if mod(i, 20) == 0
                     half = ceil(obj.m_population_size / 2);
-                    obj = Initialize(obj, half)
+                    obj = Initialize(obj, half);
                 end
             end
-            
-            top = GetBest(obj, obj.m_population);
             
         end
             

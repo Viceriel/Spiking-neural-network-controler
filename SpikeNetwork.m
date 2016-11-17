@@ -44,7 +44,7 @@ classdef SpikeNetwork
                               obj.weights{i}{j}{k}{l} = Synapse();
                               
                               if connections(i, k) == 1
-                                 obj.weights{i}{j}{k}{l}.value = (ma - mi)*rand(1, 1) + mi;
+                                 obj.weights{i}{j}{k}{l}.value = (0.1 - 0.001)*rand(1, 1) + 0.001;
                               end
                                 
                         end

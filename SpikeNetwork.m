@@ -44,7 +44,7 @@ classdef SpikeNetwork
                               obj.weights{i}{j}{k}{l} = Synapse();
                               
                               if connections(i, k) == 1
-                                 obj.weights{i}{j}{k}{l}.value = (ma - mi)*rand(1, 1) + mi;
+                                 obj.weights{i}{j}{k}{l}.value = (0.1 - 0.001)*rand(1, 1) + 0.001;
                               end
                                 
                         end
@@ -134,11 +134,9 @@ classdef SpikeNetwork
                             for n = 1 : obj.layers(m)  
                                 if obj.weights{i}{j}{m}{n}.value ~= 0
                                     if obj.weights{i}{j}{m}{n}.spike_time ~= 0
-                                        b = obj.neural{m}{1}{n}.spike_time;
-                                        c = obj.neural{i}{1}{j}.spike_time;
-                                        obj = STDP(obj, obj.neural{m}{1}{n}.spike_time - obj.neural{i}{1}{j}.spike_time, [i j], [m n], obj.neural{i}{1}{j}.rule);
+                                        obj = STDP(obj, obj.neural{m}{1}{n}.spike_time - obj.weights{i}{j}{m}{n}.spike_time, [i j], [m n], obj.neural{m}{1}{n}.rule);
                                     else
-                                        obj = STDP(obj, obj.weights{i}{j}{m}{n}.time_from_spike, [i j], [m n], obj.neural{i}{1}{j}.rule);
+                                        obj = STDP(obj, obj.weights{i}{j}{m}{n}.time_from_spike, [i j], [m n], obj.neural{m}{1}{n}.rule);
                                         obj.weights{i}{j}{m}{n}.time_from_spike = 0;
                                     end
                                 end      
@@ -176,15 +174,15 @@ classdef SpikeNetwork
             
             if rule == 1
                 if spike_differences < 0 
-                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.t);
                 else
-                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.t);
                 end
             else
                 if spike_differences < 0
-                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value - obj.neural{post(1)}{1}{post(2)}.A2*exp(-spike_differences / obj.neural{post(1)}{1}{post(2)}.t);
                 else
-                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.tau)*obj.neural{post(1)}{1}{post(2)}.output;
+                    obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value = obj.weights{post(1)}{post(2)}{pre(1)}{pre(2)}.value + obj.neural{post(1)}{1}{post(2)}.A1*exp(spike_differences / obj.neural{post(1)}{1}{post(2)}.t);
                 end
             end
             

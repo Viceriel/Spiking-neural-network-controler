@@ -33,7 +33,7 @@ classdef GeneticAlgorithm
         
         function obj = Initialization(obj, init)
             
-            for i = 1 : init  
+            for i = init : obj.m_population_size  
                 for j = 1 : obj.m_chromosone_length
                    obj.m_population(i, j) = randi([0 1]); 
                 end
@@ -59,8 +59,14 @@ classdef GeneticAlgorithm
             end
         end
         
-        function obj = Fitness(obj, population)
+        function obj = Fitness(obj, populate)
          
+            if populate == true
+                population = obj.m_population;
+            else
+                population = obj.m_children;
+            end
+            
             len = size(obj.m_population);
             len = len(1);
             xRef = 0.1;
@@ -77,6 +83,12 @@ classdef GeneticAlgorithm
                 end
                 
                 population(i, end) = 1000/((x(end) - xRef)^2 + (y(end) - yRef)^2 + sumPath);
+            end
+            
+            if populate == true
+                obj.m_population = population;
+            else
+                obj.m_children = population;
             end
             
         end
@@ -154,7 +166,7 @@ classdef GeneticAlgorithm
             
             len = obj.m_population_size;
             
-            for i = 1 : len
+            for i = 3 : len
                 parent = Selection(obj, obj.m_population);
                 child = Selection(obj, obj.m_children);
                 
@@ -170,12 +182,12 @@ classdef GeneticAlgorithm
         function obj = Evolve(obj, generations)
            
             obj = Initialization(obj, 1);
-            obj = Fitness(obj, obj.m_population);
+            obj = Fitness(obj, true);
             
             for i = 1 : generations
                 obj = Crossover(obj);
                 obj = Mutation(obj);
-                obj = Fitness(obj, obj.m_children);
+                obj = Fitness(obj, false);
                 obj = Replace(obj);
                 
                 if mod(i, 20) == 0

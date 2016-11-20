@@ -173,7 +173,7 @@ classdef GeneticAlgorithm
                 if obj.m_population(parent, end) > obj.m_population(child, end)
                     obj.m_population(i, :) = obj.m_population(parent, :);
                 else
-                    obj.m_population(i, :) = obj.m_children(parent, :);
+                    obj.m_population(i, :) = obj.m_children(child, :);
                 end 
             end
             
@@ -181,7 +181,7 @@ classdef GeneticAlgorithm
         
         function obj = Evolve(obj, generations)
            
-            obj = Initialization(obj, 1);
+            obj = Initialization(obj, true);
             obj = Fitness(obj, true);
             
             for i = 1 : generations
@@ -192,7 +192,8 @@ classdef GeneticAlgorithm
                 
                 if mod(i, 20) == 0
                     half = ceil(obj.m_population_size / 2);
-                    obj = Initialize(obj, half);
+                    obj = Initialization(obj, half);
+                    obj = Fitness(obj, true);
                 end
             end
             

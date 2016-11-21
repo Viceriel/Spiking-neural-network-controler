@@ -76,12 +76,12 @@ classdef GeneticAlgorithm
                
                 net = Decoding(obj, i, population);
                 
-                [x, y] = RunSim(net, 1.1, 1.1, 10);
+                [x, y] = RunSim(net, 10.1, 10.1, 10);
                 
                 sumPath = 0;
                 
                 for j = 1:length(x)
-                    sumPath = sumPath + ((x(j) - xRef)^2 + (y(j) - yRef)^2);
+                    sumPath = sumPath + sqrt((x(j) - xRef)^2 + (y(j) - yRef)^2);
                 end
                 
                 population(i, end) = 100/sumPath;
@@ -195,7 +195,7 @@ classdef GeneticAlgorithm
                 top = GetBest(obj, obj.m_population);
                 net = Decoding(obj, top, obj.m_population);
 
-                [x, y] = RunSim(net, 1.1, 1.1, 10);
+                [x, y] = RunSim(net, 10.1, 10.1, 10);
                 figure();
                 plot(x, y)
 

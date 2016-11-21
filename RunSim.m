@@ -9,8 +9,8 @@ global fi_1
 global omegaR
 global omegaL
 global fi
-x_1 = 0;
-y_1 = 0;
+x_1 = 1;
+y_1 = 1;
 fi_1 = 0;
 omegaR = 0;
 omegaL = 0;
@@ -37,6 +37,7 @@ omegaR = sum(wR)/10;
 omegaL = sum(wL)/10;
 
 sim('mobileSim');
+
 xVec = [xVec x(2)];
 yVec = [yVec y(2)];
 fiVec = [fiVec fi(2)];
@@ -44,6 +45,7 @@ fiVec = [fiVec fi(2)];
 x_1 = x(2);
 y_1 = y(2);
 fi_1 = fi(2);
+
 end
 
 end

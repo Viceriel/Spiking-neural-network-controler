@@ -14,6 +14,4 @@ global fi
 
 EA = GeneticAlgorithm(0.05, 20, [6 5 2], [0 0 0; 1 0 0; 1 1 0]);
 EA = Evolve(EA, 20);
-top = GetBest(EA, EA.m_population);
-net = Decoding(EA, top, EA.m_population);
 

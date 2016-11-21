@@ -76,13 +76,15 @@ classdef GeneticAlgorithm
                
                 net = Decoding(obj, i, population);
                 
-                [x, y] = RunSim(net, 0.1, 0.1, 5);
+                [x, y] = RunSim(net, 1.1, 1.1, 10);
                 
-                for j = 1:length(x)-1
-                    sumPath = (x(j) - x(j+1))^2 + (y(j) - y(j+1))^2;
+                sumPath = 0;
+                
+                for j = 1:length(x)
+                    sumPath = sumPath + ((x(j) - xRef)^2 + (y(j) - yRef)^2);
                 end
                 
-                population(i, end) = 1000/((x(end) - xRef)^2 + (y(end) - yRef)^2 + sumPath);
+                population(i, end) = 100/sumPath;
             end
             
             if populate == true
@@ -190,6 +192,13 @@ classdef GeneticAlgorithm
                 obj = Fitness(obj, false);
                 obj = Replace(obj);
                 
+                top = GetBest(obj, obj.m_population);
+                net = Decoding(obj, top, obj.m_population);
+
+                [x, y] = RunSim(net, 1.1, 1.1, 10);
+                figure();
+                plot(x, y)
+
                 if mod(i, 20) == 0
                     half = ceil(obj.m_population_size / 2);
                     obj = Initialization(obj, half);

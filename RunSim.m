@@ -9,8 +9,8 @@ global fi_1
 global omegaR
 global omegaL
 global fi
-x_1 = 1;
-y_1 = 1;
+x_1 = 10;
+y_1 = 10;
 fi_1 = 0;
 omegaR = 0;
 omegaL = 0;

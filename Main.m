@@ -3,7 +3,7 @@ clear all
 close all
 
 global x_1
-global y_1
+global y_1a
 global omegaR
 global omegaL
 global fi_1

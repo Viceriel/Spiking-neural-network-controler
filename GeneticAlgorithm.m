@@ -43,7 +43,8 @@ classdef GeneticAlgorithm
         function net = Decoding(obj, index, population)
            
             binary2num([1 1], 10);
-            net = SpikeNetwork(obj.m_structure, obj.m_connections, 0.1, 0);
+            a = load('net');
+            net = a.net;
             len = length(obj.m_structure);
             struct = obj.m_structure;
             
@@ -69,22 +70,25 @@ classdef GeneticAlgorithm
             
             len = size(obj.m_population);
             len = len(1);
-            xRef = 0.1;
-            yRef = 0.1;
+            xRef = 10.1;
+            yRef = 10.1;
             
             for i = 1 : len
-               
+                suma = 0;
+               for j = 1 : 5
                 net = Decoding(obj, i, population);
                 
-                [x, y] = RunSim(net, 10.1, 10.1, 10);
+                [x, y] = RunSim(net, 10.1, 10.1, 5);
                 
                 sumPath = 0;
                 
-                for j = 1:length(x)
-                    sumPath = sumPath + sqrt((x(j) - xRef)^2 + (y(j) - yRef)^2);
+                for k = 1:length(x)
+                    sumPath = sumPath + sqrt((x(k) - xRef)^2 + (y(k) - yRef)^2);
                 end
                 
-                population(i, end) = 100/sumPath;
+                suma = suma + 100/sumPath;
+               end
+               population(i, end) = suma / 5;
             end
             
             if populate == true
@@ -164,7 +168,7 @@ classdef GeneticAlgorithm
         function obj = Replace(obj)
            
             obj.m_population(1, :) = obj.m_population(GetBest(obj, obj.m_population), :);
-            obj.m_population(2, :) = obj.m_population(GetBest(obj, obj.m_children), :);
+            obj.m_population(2, :) = obj.m_children(GetBest(obj, obj.m_children), :);
             
             len = obj.m_population_size;
             
@@ -172,7 +176,7 @@ classdef GeneticAlgorithm
                 parent = Selection(obj, obj.m_population);
                 child = Selection(obj, obj.m_children);
                 
-                if obj.m_population(parent, end) > obj.m_population(child, end)
+                if obj.m_population(parent, end) > obj.m_children(child, end)
                     obj.m_population(i, :) = obj.m_population(parent, :);
                 else
                     obj.m_population(i, :) = obj.m_children(child, :);
@@ -195,7 +199,7 @@ classdef GeneticAlgorithm
                 top = GetBest(obj, obj.m_population);
                 net = Decoding(obj, top, obj.m_population);
 
-                [x, y] = RunSim(net, 10.1, 10.1, 10);
+                [x, y] = RunSim(net, 10.1, 10.1, 5);
                 figure();
                 plot(x, y)
 

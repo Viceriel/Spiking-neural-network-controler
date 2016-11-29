@@ -27,14 +27,14 @@ for i = 1:0.05:time;
     omegaR1 = omegaR;
     omegaL1 = omegaL;
     
-    for j = 1:100
+    for j = 1:50
         net = Run(net,[deltaX, deltaY, rho, deltaPhi, omegaR1, omegaL1]);
         wR = [wR net.net_output(1)];
         wL = [wL net.net_output(2)];
     end
 
-omegaR = sum(wR)/10;
-omegaL = sum(wL)/10;
+omegaR = sum(wR)/5;
+omegaL = sum(wL)/5;
 
 sim('mobileSim');
 

@@ -104,10 +104,8 @@ classdef SpikeNetwork
                 end                
             end
             
-            obj.time = obj.time + 1;
-            
             for i = 2 : len
-                obj.time = obj.time + 1;
+                obj.time = obj.time + 0.1;
                 for j = 1 : obj.layers(i)
                     input = 0;
                     for k = 1 : len
@@ -162,6 +160,8 @@ classdef SpikeNetwork
                     end
                 end
             end
+            
+            obj.time = obj.time - 0.1;
             
             for i = 1 : obj.layers(len)
                

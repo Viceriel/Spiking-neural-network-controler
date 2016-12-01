@@ -79,12 +79,12 @@ classdef SpikeNetwork
             
         end
         
-        function obj = Run(obj, data)
+        function obj = Run(obj)
             
             len = length(obj.layers);
             
             for i = 1 : obj.layers(1)     
-                obj.neural{1}{1}{i} = ComputeOutput(obj.neural{1}{1}{i}, data(i));
+                obj.neural{1}{1}{i} = ComputeOutput(obj.neural{1}{1}{i});
                 if obj.neural{1}{1}{i}.output == 1
                     obj.neural{1}{1}{i}.spike_time = obj.time;
                     for j = 2 : len

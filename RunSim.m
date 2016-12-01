@@ -27,8 +27,39 @@ for i = 1:0.05:time;
     omegaR1 = omegaR;
     omegaL1 = omegaL;
     
+    if deltaX > 1
+        deltaX = 1;
+    end
+    if deltaY > 1
+        deltaY = 1
+    end
+    if rho > 1
+        rho = 1
+    end
+    omegaR1 = omegaR1 / 10;
+    omegaL1 = omegaL1 / 10;
+    in(1) = 1 / deltaX;
+    in(1) = round(50 / in(1));
+    in(2) = 1 / deltaY;
+    in(2) = round(50 / in(2));
+    in(3) = 1 / rho;
+    in(3) = round(50 / in(3));
+    in(4) = 1 / deltaPhi;
+    in(4) = round(50 / in(4));
+    in(5) = 1 /omegaR1;
+    in(5) = round(50 / in(5));
+    in(6) = 1 /omegaL1;
+    in(6) = round(50 / in(6));
+    
+    net.neural{1}{1}{1}.count = in(1);
+    net.neural{1}{1}{2}.count = in(2);
+    net.neural{1}{1}{3}.count = in(3);
+    net.neural{1}{1}{4}.count = in(4);
+    net.neural{1}{1}{5}.count = in(5);
+    net.neural{1}{1}{6}.count = in(6);
+    
     for j = 1:50
-        net = Run(net,[deltaX, deltaY, rho, deltaPhi, omegaR1, omegaL1]);
+        net = Run(net);
         wR = [wR net.net_output(1)];
         wL = [wL net.net_output(2)];
     end

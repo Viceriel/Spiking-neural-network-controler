@@ -8,6 +8,7 @@ classdef InputNeuron
         A2;
         t;
         rule;
+        count;
        
     end
     
@@ -20,21 +21,17 @@ classdef InputNeuron
             obj.A2 = 0;
             obj.t = 0;
             obj.rule = 0;
+            obj.count = 0;
         end
         
-        function r = ComputeOutput(obj, input)
+        function obj = ComputeOutput(obj)
             
-            if (rand(1, 1) < input)
-               
+            if obj.count > 0
                 obj.output = 1;
-                
+                obj.count = obj.count - 1;
             else
-                
                 obj.output = 0;
-                
             end
-            
-            r = obj;
             
         end
         

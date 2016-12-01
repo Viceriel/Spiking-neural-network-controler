@@ -74,21 +74,17 @@ classdef GeneticAlgorithm
             yRef = 10.1;
             
             for i = 1 : len
-                suma = 0;
-               for j = 1 : 5
+
                 net = Decoding(obj, i, population);
-                
-                [x, y] = RunSim(net, 10.1, 10.1, 5);
+                [x, y] = RunSim(net, 10.1, 10.1, 10);
                 
                 sumPath = 0;
                 
                 for k = 1:length(x)
                     sumPath = sumPath + sqrt((x(k) - xRef)^2 + (y(k) - yRef)^2);
                 end
-                
-                suma = suma + 100/sumPath;
-               end
-               population(i, end) = suma / 5;
+
+               population(i, end) = 100 / sumPath;
             end
             
             if populate == true

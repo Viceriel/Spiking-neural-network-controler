@@ -15,7 +15,7 @@ fi_1 = 0;
 omegaR = 0;
 omegaL = 0;
 
-for i = 1:0.05:time;
+for i = 0:0.05:time;
     wR = [];
     wL = [];
     deltaX = abs(xRef - x_1);

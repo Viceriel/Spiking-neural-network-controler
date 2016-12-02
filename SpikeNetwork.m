@@ -79,7 +79,7 @@ classdef SpikeNetwork
             
         end
         
-        function obj = Run(obj)
+        function obj = Run(obj, data)
             
             len = length(obj.layers);
             

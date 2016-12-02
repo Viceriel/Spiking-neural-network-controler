@@ -51,9 +51,9 @@ classdef GeneticAlgorithm
             for i = 1 : len - 1 
                 for j = 1 : obj.m_structure(i)
                     ind = ((i > 1)*struct(i) + j) * 16 - 16 + 1;
-                    net.neural{i}{1}{1}.rule = population(index, ind);
+                    net.neural{i}{1}{j}.rule = population(index, ind);
                     net.neural{i}{1}{j}.t = binary2num(population(index, ind + 11 : ind + 16), 100);
-                    A = binary2num(population(ind + 1 : ind + 10), 1000);
+                    A = binary2num(population(index, ind + 1 : ind + 10), 1000);
                     net.neural{i}{1}{j}.A1 = A;
                     net.neural{i}{1}{j}.A2 = A;
                 end
@@ -76,7 +76,7 @@ classdef GeneticAlgorithm
             for i = 1 : len
 
                 net = Decoding(obj, i, population);
-                [x, y] = RunSim(net, 10.1, 10.1, 10);
+                [x, y] = RunSim(net, 10.1, 10.1, 1);
                 
                 sumPath = 0;
                 

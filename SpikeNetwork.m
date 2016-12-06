@@ -97,7 +97,7 @@ classdef SpikeNetwork
                   for j = 2 : len
                     for k = 1 : obj.layers(j)
                         if obj.weights{j}{k}{1}{i}.spike_time == 0
-                           obj.weights{j}{k}{1}{i}.time_from_spike = obj.weights{j}{k}{1}{i}.time_from_spike + 1;
+                           obj.weights{j}{k}{1}{i}.time_from_spike = obj.weights{j}{k}{1}{i}.time_from_spike + 0.1;
                         end
                     end
                   end
@@ -132,7 +132,7 @@ classdef SpikeNetwork
                             for n = 1 : obj.layers(m)  
                                 if obj.weights{i}{j}{m}{n}.value ~= 0
                                     if obj.weights{i}{j}{m}{n}.spike_time ~= 0
-                                        obj = STDP(obj, obj.neural{m}{1}{n}.spike_time - obj.weights{i}{j}{m}{n}.spike_time, [i j], [m n], obj.neural{m}{1}{n}.rule);
+                                        obj = STDP(obj, obj.weights{i}{j}{m}{n}.spike_time -  obj.neural{i}{1}{j}.spike_time, [i j], [m n], obj.neural{m}{1}{n}.rule);
                                     else
                                         obj = STDP(obj, obj.weights{i}{j}{m}{n}.time_from_spike, [i j], [m n], obj.neural{m}{1}{n}.rule);
                                         obj.weights{i}{j}{m}{n}.time_from_spike = 0;
@@ -152,7 +152,7 @@ classdef SpikeNetwork
                            for x = i + 1 : len
                                for y = 1 : obj.layers(x)
                                    if obj.weights{x}{y}{i}{j}.spike_time == 0
-                                        obj.weights{x}{y}{i}{j}.time_from_spike = obj.weights{x}{y}{i}{j}.time_from_spike + 1;
+                                        obj.weights{x}{y}{i}{j}.time_from_spike = obj.weights{x}{y}{i}{j}.time_from_spike + 0.1;
                                    end
                                end
                            end     

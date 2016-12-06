@@ -1,4 +1,4 @@
-function [ xVec, yVec ] = RunSim( net, xRef, yRef, time )
+function [ xVec, yVec, outOmegaR, outOmegaL, net ] = RunSim( net, xRef, yRef, time )
 
 xVec = [];
 yVec = [];
@@ -15,15 +15,21 @@ fi_1 = 0;
 omegaR = 0;
 omegaL = 0;
 
+outOmegaR = [];
+outOmegaL = [];
+
 for i = 0:0.05:time;
     wR = [];
     wL = [];
     deltaX = abs(xRef - x_1);
     deltaY = abs(yRef - y_1);
     rho = sqrt((xRef - x_1)^2 + (yRef - y_1)^2);
-    Phi = atan((yRef - y_1)/(xRef - x_1)) - fi_1;
-    n = Phi/pi;
-    deltaPhi = ((Phi/n) + pi)/(2*pi);
+%     Phi = atan((yRef - y_1)/(xRef - x_1)) - fi_1;
+%     n = Phi/pi;
+%     deltaPhi = ((Phi/n) + pi)/(2*pi);
+    Phi = atan2((yRef - y_1),(xRef - x_1)) - fi_1;
+    n = atan2(sin(Phi),cos(Phi));
+    deltaPhi = (n + pi)/(2*pi);
     omegaR1 = omegaR;
     omegaL1 = omegaL;
     
@@ -66,6 +72,9 @@ for i = 0:0.05:time;
 
 omegaR = sum(wR)/5;
 omegaL = sum(wL)/5;
+
+outOmegaR = [outOmegaR omegaR];
+outOmegaL = [outOmegaL omegaL];
 
 sim('mobileSim');
 

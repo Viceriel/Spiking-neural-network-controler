@@ -9,7 +9,7 @@ classdef GeneticAlgorithm
         m_structure;
         m_connections;
         m_children;
-        
+        m_network;
     end
     
     methods
@@ -76,8 +76,10 @@ classdef GeneticAlgorithm
             for i = 1 : len
 
                 net = Decoding(obj, i, population);
-                [x, y] = RunSim(net, 10.1, 10.1, 1);
-                
+                for k = 1:3
+                    [x, y, wR, wL, net] = RunSim(net, 10.1, 10.1, 5);
+                end
+
                 sumPath = 0;
                 
                 for k = 1:length(x)
@@ -194,10 +196,18 @@ classdef GeneticAlgorithm
                 
                 top = GetBest(obj, obj.m_population);
                 net = Decoding(obj, top, obj.m_population);
-
-                [x, y] = RunSim(net, 10.1, 10.1, 5);
+                
+                for k = 1:3
+                    [x, y, wR, wL, net] = RunSim(net, 10.1, 10.1, 5);
+                end
+                obj.m_network = net;
                 figure();
                 plot(x, y)
+                figure();
+                subplot(2,1,1)
+                plot(wR)
+                subplot(2,1,2)
+                plot(wL)
 
                 if mod(i, 20) == 0
                     half = ceil(obj.m_population_size / 2);

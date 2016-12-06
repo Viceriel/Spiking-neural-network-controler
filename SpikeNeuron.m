@@ -38,7 +38,7 @@ classdef SpikeNeuron
                      
            obj.u = obj.u + (obj.uprah/obj.tau) - (obj.u/obj.tau) + (obj.R*thalamic_input)/obj.tau;
            
-           if obj.u >= 40
+           if obj.u >= 22
                obj.output = 1; 
                obj.u = obj.uprah;
                

@@ -47,10 +47,17 @@ classdef GeneticAlgorithm
             net = a.net;
             len = length(obj.m_structure);
             struct = obj.m_structure;
+            l = 0;
             
             for i = 1 : len - 1 
                 for j = 1 : obj.m_structure(i)
-                    ind = ((i > 1)*struct(i) + j) * 16 - 16 + 1;
+                    if i > 1
+                        l = i - 1;
+                    else
+                        l = i;
+                    end
+                    
+                    ind = ((i > 1)*struct(l) + j) * 16 - 16 + 1;
                     net.neural{i}{1}{j}.rule = population(index, ind);
                     net.neural{i}{1}{j}.t = binary2num(population(index, ind + 11 : ind + 16), 100);
                     A = binary2num(population(index, ind + 1 : ind + 10), 1000);
@@ -203,11 +210,9 @@ classdef GeneticAlgorithm
                 obj.m_network = net;
                 figure();
                 plot(x, y)
-                figure();
-                subplot(2,1,1)
-                plot(wR)
-                subplot(2,1,2)
-                plot(wL)
+                hold all
+                plot(10.1, 10.1, 'r+');
+                grid;
 
                 if mod(i, 20) == 0
                     half = ceil(obj.m_population_size / 2);
